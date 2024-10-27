@@ -1,27 +1,43 @@
 const mongodb = require("../db/connect");
-const ObjectId = require("mongodb").ObjectId;
+const { ObjectId } = require("mongodb");
 
 //FILIPINO FOOD COLLECTION
 // show all the filipino food
-const getAllFilipinoFood = async (req, res, next) => {
-  const result = await mongodb.getDb().collection("filipinofood").find();
-  result.toArray().then((lists) => {
+const getAllFilipinoFood = async (req, res) => {
+  try {
+    const result = await mongodb
+      .getDb()
+      .collection("filipinofood")
+      .find()
+      .toArray();
     res.setHeader("Content-Type", "application/json");
-    res.status(200).json(lists);
-  });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 };
 
 // show a filipino food based on id
 const getSingleFilipinoFood = async (req, res, next) => {
-  const userId =  new ObjectId(req.params.id);
-  const result = await mongodb
-  .getDb()
-  .collection("filipinofood")
-  .findOne({ _id: userId });
-  result.toArray().then((lists) => {
-    res.setHeader("Content-Type", "application/json");
-    res.status(200).json(lists[0]);
-  });
+  const foodId = req.params.id;
+
+  try {
+    const result = await mongodb
+      .getDb()
+      .collection("filipinofood")
+      .findOne({ _id: new ObjectId(foodId) });
+
+    if (result) {
+      res.setHeader("Content-Type", "application/json");
+      res.status(200).json(result);
+    } else {
+      res.status(404).json({ message: "Filipino Food not found." });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 };
 
 // add a filipino food
@@ -34,88 +50,114 @@ const newFilipinoFood = async (req, res) => {
     region: req.body.region,
     createdAt: req.body.createdAt,
   };
-  const response = await mongodb
-    .getDb()
-    .collection("filipinoFood")
-    .insertOne(food);
-  if (response.acknowledged) {
-    res.status(201).json(response);
-  } else {
-    res
-      .status(500)
-      .json(
-        response.error || "Some error occurred while adding a Filipino food."
-      );
+
+  try {
+    const response = await mongodb
+      .getDb()
+      .collection("filipinofood")
+      .insertOne(food);
+
+    if (response.acknowledged) {
+      res.status(201).json({
+        message: "Food added successfully",
+        foodId: response.insertedId,
+      });
+    } else {
+      res.status(500).json({ message: "Error occurred while adding food." });
+    }
+  } catch (error) {
+    console.error(error); // Log the error
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
 // update filipino food
 const updateFilipinoFood = async (req, res) => {
-  const userId = new ObjectId(req.params.id);
-  // be aware of updateOne if you only want to update specific fields
-  const food = {
-    name: req.body.name,
-    description: req.body.description,
-    ingredients: req.body.ingredients,
-    instructions: req.body.instructions,
-    region: req.body.region,
-    createdAt: req.body.createdAt
-  };
-  const response = await mongodb
-    .getDb()
-    .collection('filipinoFood')
-    .replaceOne({ _id: userId }, food);
-  console.log(response);
-  if (response.modifiedCount > 0) {
-    res.status(204).send();
-  } else {
-    res.status(500).json(response.error || 'Some error occurred while updating the contact.');
+  const foodId = new ObjectId(req.params.id);
+  const updatedFields = {};
+
+  try {
+    const response = await mongodb
+      .getDb()
+      .collection("filipinofood")
+      .updateOne({ _id: foodId }, { $set: updatedFields });
+
+    if (response.modifiedCount > 0) {
+      res.status(200).json({ message: "Food updated successfully." });
+    } else {
+      res.status(404).json({ message: "Food not found or no changes made." });
+    }
+  } catch (error) {
+    console.error("Error updating food:", error);
+    res
+      .status(500)
+      .json({ message: "Some error occurred while updating the food." });
   }
 };
 
-
 // delete food
 const deleteFilipinoFood = async (req, res) => {
-  const userId = new ObjectId(req.params.id);
-  const response = await mongodb
-  .getDb()
-  .collection("filipinoFood")
-  .deleteOne({ _id: userId });
-  if (response.acknowledged) {
-    res.status(200).json(response);
+  const foodId = new ObjectId(req.params.id);
+
+  try {
+    const response = await mongodb
+      .getDb()
+      .collection("filipinofood")
+      .deleteOne({ _id: foodId });
+
+    if (response.deletedCount > 0) {
+      res.status(200).json({ message: "Food deleted successfully." });
     } else {
-      res
-      .status(500)
-      .json(
-        response.error || "Some error occurred while deleting the contact."
-      );
+      res.status(404).json({ message: "Food not found." });
+    }
+  } catch (error) {
+    console.error("Error deleting food:", error);
+    res.status(500).json({
+      message: "Some error occurred while deleting the food.",
+    });
   }
 };
 
 // SHOPPING LIST COLLECTION
 // show all the shopping list
 const getAllShoppingList = async (req, res, next) => {
-    const result = await mongodb.getDb().collection("shoppinglist").find();
-    result.toArray().then((lists) => {
-      res.setHeader("Content-Type", "application/json");
-      res.status(200).json(lists);
-    });
-  };
-
-  // show a filipino food based on id
-const getSingleShoppingList = async (req, res, next) => {
-  const userId =  new ObjectId(req.params.id);
-  const result = await mongodb
-  .getDb()
-  .collection("shoppinglist")
-  .findOne({ _id: userId });
-  result.toArray().then((lists) => {
+  try {
+    const result = await mongodb
+      .getDb()
+      .collection("shoppinglist")
+      .find()
+      .toArray();
     res.setHeader("Content-Type", "application/json");
-    res.status(200).json(lists[0]);
-  });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 };
 
-// add a filipino food
+// show a shopping list based on id
+const getSingleShoppingList = async (req, res, next) => {
+  const listId = req.params.id;
+
+  try {
+    const result = await mongodb
+      .getDb()
+      .collection("shoppinglist")
+      .findOne({ _id: new ObjectId(listId) });
+
+    if (result) {
+      res.setHeader("Content-Type", "application/json");
+      res.status(200).json(result);
+    } else {
+      res.status(404).json({ message: "List not found." });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+// Add a shopping list
 const newShoppingList = async (req, res) => {
   const list = {
     name: req.body.name,
@@ -125,62 +167,89 @@ const newShoppingList = async (req, res) => {
     purchased: req.body.purchased,
     createdAt: req.body.createdAt,
   };
-  const response = await mongodb
-    .getDb()
-    .collection("shoppingList")
-    .insertOne(list);
-  if (response.acknowledged) {
-    res.status(201).json(response);
-  } else {
-    res
-      .status(500)
-      .json(
-        response.error || "Some error occurred while adding a Filipino food."
-      );
+
+  try {
+    const response = await mongodb
+      .getDb()
+      .collection("shoppinglist")
+      .insertOne(list);
+
+    if (response.acknowledged) {
+      res.status(201).json({
+        message: "Shopping list added successfully",
+        listId: response.insertedId,
+      });
+    } else {
+      res.status(500).json({ message: "Error occurred while adding list." });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-// update filipino food
+// update shopping list
 const updateShoppingList = async (req, res) => {
-  const userId = new ObjectId(req.params.id);
-  // be aware of updateOne if you only want to update specific fields
+  const listId = new ObjectId(req.params.id);
   const list = {
     name: req.body.name,
     quantity: req.body.quantity,
     unit: req.body.unit,
     category: req.body.category,
     purchased: req.body.purchased,
-    createdAt: req.body.createdAt
+    createdAt: req.body.createdAt,
   };
-  const response = await mongodb
-    .getDb()
-    .collection('shoppingList')
-    .replaceOne({ _id: userId }, list);
-  console.log(response);
-  if (response.modifiedCount > 0) {
-    res.status(204).send();
-  } else {
-    res.status(500).json(response.error || 'Some error occurred while updating the contact.');
-  }
-};
-
-
-// delete food
-const deleteShoppingList = async (req, res) => {
-  const userId = new ObjectId(req.params.id);
-  const response = await mongodb
-  .getDb()
-  .collection("shoppingList")
-  .deleteOne({ _id: userId });
-  if (response.acknowledged) {
-    res.status(200).json(response);
+  try {
+    const response = await mongodb
+      .getDb()
+      .collection("shoppinglist")
+      .replaceOne({ _id: listId }, list);
+    console.log(response);
+    if (response.modifiedCount > 0) {
+      res.status(200).json({ message: "List updated successfully." });
     } else {
-      res
+      res.status(404).json({ message: "List not found or no changes made." });
+    }
+  } catch (error) {
+    console.error("Error updating list:", error);
+    res
       .status(500)
-      .json(
-        response.error || "Some error occurred while deleting the contact."
-      );
+      .json({ message: "Some error occurred while updating the list." });
   }
 };
 
-module.exports = { getAllFilipinoFood, getSingleFilipinoFood, newFilipinoFood, updateFilipinoFood, deleteFilipinoFood, getAllShoppingList, getSingleShoppingList, newShoppingList, updateShoppingList,deleteShoppingList};
+// delete shopping list
+const deleteShoppingList = async (req, res) => {
+  const listId = req.params.id;
+
+  try {
+    const response = await mongodb
+      .getDb()
+      .collection("shoppinglist")
+      .deleteOne({ _id: listId });
+
+    if (response.acknowledged) {
+      res.status(200).json({ message: "List deleted successfully." });
+    } else {
+      res.status(404).json({ message: "List not found." });
+    }
+  } catch (error) {
+    console.error("Error deleting list:", error);
+    res
+      .status(500)
+      .json({ message: "Some error occurred while deleting the list." });
+  }
+};
+
+module.exports = {
+  getAllFilipinoFood,
+  getSingleFilipinoFood,
+  newFilipinoFood,
+  updateFilipinoFood,
+  deleteFilipinoFood,
+  getAllShoppingList,
+  getSingleShoppingList,
+  newShoppingList,
+  updateShoppingList,
+  deleteShoppingList,
+};

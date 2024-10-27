@@ -1,0 +1,29 @@
+body {
+    background-color: #f0f0f0;
+    color: #333;
+  }
+  
+  header {
+    background-color: #c8102e;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+  }
+  
+  h2 {
+    color: #003da5;
+  }
+  
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  li {
+    background: white;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  

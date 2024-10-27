@@ -1,26 +1,26 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-const contactsController = require('../controllers/pinoyFlavor');
+const shoppingListController = require("../controllers/pinoyFlavor");
 
 /**
  * @swagger
  * /shoppingList:
  *   get:
- *     summary: Get a list of shopping list
- *     description: Retrieve a shopping list from the database.
+ *     summary: Get a list of shopping items
+ *     description: Retrieve a list of shopping items from the database.
  *     responses:
  *       200:
- *         description: Successful response with a shopping list.
+ *         description: A JSON array of shopping list items
  */
-router.get('/', contactsController.getAllShoppingList); // get all shopping list
+router.get("/", shoppingListController.getAllShoppingList); // Get all shopping list items
 
 /**
  * @swagger
  * /shoppingList/{id}:
  *   get:
- *     summary: Get a single list by ID
- *     description: Retrieve a single list from the database based on the ID.
+ *     summary: Get a single shopping item by ID
+ *     description: Retrieve a single shopping item from the database using the ID.
  *     parameters:
  *       - in: path
  *         name: id
@@ -29,16 +29,16 @@ router.get('/', contactsController.getAllShoppingList); // get all shopping list
  *           type: string
  *     responses:
  *       200:
- *         description: Successful response with a single shopping list.
+ *         description: A single shopping list item
  */
-router.get('/:id', contactsController.getSingleShoppingList);  // get a single shopping list based on the id
+router.get("/:id", shoppingListController.getSingleShoppingList); // Get single shopping list item by ID
 
 /**
  * @swagger
  * /shoppingList:
  *   post:
- *     summary: Create a new shopping list
- *     description: Create a new shopping list and add it to the database.
+ *     summary: Create a new shopping list item
+ *     description: Add a new shopping list item to the database.
  *     requestBody:
  *       required: true
  *       content:
@@ -49,7 +49,7 @@ router.get('/:id', contactsController.getSingleShoppingList);  // get a single s
  *               name:
  *                 type: string
  *               quantity:
- *                  type: number
+ *                 type: number
  *               unit:
  *                 type: string
  *               category:
@@ -57,30 +57,28 @@ router.get('/:id', contactsController.getSingleShoppingList);  // get a single s
  *               purchased:
  *                 type: boolean
  *               createdAt:
- *                  type: string
+ *                 type: string
  *             required:
  *               - name
  *               - quantity
  *               - unit
  *               - category
  *               - purchased
- *               - createAt
+ *               - createdAt
  *     responses:
  *       201:
- *         description: Shopping list created successfully.
- * 
- * 
- * 
- * 
+ *         description: Shopping list item created successfully
+ *       500:
+ *         description: Error occurred while adding food.
  */
-router.post('/', contactsController.newShoppingList); // add a shopping list
+router.post("/", shoppingListController.newShoppingList); // Add new shopping list item
 
 /**
  * @swagger
  * /shoppingList/{id}:
  *   put:
- *     summary: Update a list
- *     description: Update an existing list in the database.
+ *     summary: Update a shopping list item by ID
+ *     description: Update the details of an existing shopping list item.
  *     parameters:
  *       - in: path
  *         name: id
@@ -97,7 +95,7 @@ router.post('/', contactsController.newShoppingList); // add a shopping list
  *               name:
  *                 type: string
  *               quantity:
- *                  type: number
+ *                 type: number
  *               unit:
  *                 type: string
  *               category:
@@ -105,19 +103,30 @@ router.post('/', contactsController.newShoppingList); // add a shopping list
  *               purchased:
  *                 type: boolean
  *               createdAt:
- *                  type: string
+ *                 type: string
+ *             required:
+ *               - name
+ *               - quantity
+ *               - unit
+ *               - category
+ *               - purchased
+ *               - createdAt
  *     responses:
- *       204:
- *         description: Shopping list updated successfully.
+ *       200:
+ *         description: Shopping list item updated successfully
+ *       404:
+ *         description: Food not found or no changes made.
+ *       500:
+ *         description: An error occurred while updating the food.
  */
-router.put('/:id', contactsController.updateShoppingList); // update shopping list
+router.put("/:id", shoppingListController.updateShoppingList); // Update shopping list item
 
 /**
  * @swagger
  * /shoppingList/{id}:
  *   delete:
- *     summary: Delete a list
- *     description: Delete a list from the database.
+ *     summary: Delete a shopping list item by ID
+ *     description: Remove a shopping list item from the database.
  *     parameters:
  *       - in: path
  *         name: id
@@ -126,8 +135,12 @@ router.put('/:id', contactsController.updateShoppingList); // update shopping li
  *           type: string
  *     responses:
  *       200:
- *         description: Shopping list deleted successfully.
+ *         description: Shopping list item deleted successfully
+ *       404:
+ *         description: Food not found.
+ *       500:
+ *         description: An error occurred while deleting the food.
  */
-router.delete('/:id', contactsController.deleteShoppingList); // delete shopping list
+router.delete("/:id", shoppingListController.deleteShoppingList); // Delete shopping list item
 
 module.exports = router;

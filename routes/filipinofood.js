@@ -1,7 +1,7 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-const contactsController = require('../controllers/pinoyFlavor');
+const pinoyfood = require("../controllers/pinoyFlavor");
 
 /**
  * @swagger
@@ -13,7 +13,7 @@ const contactsController = require('../controllers/pinoyFlavor');
  *       200:
  *         description: Successful response with a list of Filipino food.
  */
-router.get('/', contactsController.getAllFilipinoFood); // get all filipino food
+router.get("/", pinoyfood.getAllFilipinoFood); // get all filipino food
 
 /**
  * @swagger
@@ -31,7 +31,7 @@ router.get('/', contactsController.getAllFilipinoFood); // get all filipino food
  *       200:
  *         description: Successful response with a single food.
  */
-router.get('/:id', contactsController.getSingleFilipinoFood);  // get a single filipino food based on the id
+router.get("/:id", pinoyfood.getSingleFilipinoFood); // get a single filipino food based on the id
 
 /**
  * @swagger
@@ -49,18 +49,22 @@ router.get('/:id', contactsController.getSingleFilipinoFood);  // get a single f
  *               name:
  *                 type: string
  *               description:
- *                  type: string
+ *                 type: string
  *               ingredients:
  *                 type: array
+ *                 items:
+ *                   type: string
  *               instructions:
  *                 type: array
+ *                 items:
+ *                   type: string
  *               region:
  *                 type: string
  *               createdAt:
  *                 type: string
  *             required:
  *               - name
- *               - desctiption
+ *               - description  # Fixed typo here
  *               - ingredients
  *               - instructions
  *               - region
@@ -68,18 +72,17 @@ router.get('/:id', contactsController.getSingleFilipinoFood);  // get a single f
  *     responses:
  *       201:
  *         description: Filipino food created successfully.
- * 
- * 
- * 
+ *       500:
+ *         description: Error occurred while adding food.
  */
-router.post('/', contactsController.newFilipinoFood); // add a filipino food
+router.post("/", pinoyfood.newFilipinoFood); // add a filipino food
 
 /**
  * @swagger
  * /filipinoFood/{id}:
  *   put:
  *     summary: Update a food
- *     description: Update an existing food in the database.
+ *     description: Update an existing food in the database. Only the fields provided in the request body will be updated.
  *     parameters:
  *       - in: path
  *         name: id
@@ -87,7 +90,6 @@ router.post('/', contactsController.newFilipinoFood); // add a filipino food
  *         schema:
  *           type: string
  *     requestBody:
- *       required: true
  *       content:
  *         application/json:
  *           schema:
@@ -96,20 +98,28 @@ router.post('/', contactsController.newFilipinoFood); // add a filipino food
  *               name:
  *                 type: string
  *               description:
- *                  type: string
+ *                 type: string
  *               ingredients:
  *                 type: array
+ *                 items:
+ *                   type: string
  *               instructions:
  *                 type: array
+ *                 items:
+ *                   type: string
  *               region:
  *                 type: string
  *               createdAt:
  *                 type: string
  *     responses:
- *       204:
+ *       200:
  *         description: Filipino food updated successfully.
+ *       404:
+ *         description: Food not found or no changes made.
+ *       500:
+ *         description: An error occurred while updating the food.
  */
-router.put('/:id', contactsController.updateFilipinoFood); // update a food
+router.put("/:id", pinoyfood.updateFilipinoFood); // update a food
 
 /**
  * @swagger
@@ -123,10 +133,16 @@ router.put('/:id', contactsController.updateFilipinoFood); // update a food
  *         required: true
  *         schema:
  *           type: string
+ *         description: The ID of the food to delete.
  *     responses:
  *       200:
  *         description: Filipino food deleted successfully.
+ *       404:
+ *         description: Food not found.
+ *       500:
+ *         description: An error occurred while deleting the food.
  */
-router.delete('/:id', contactsController.deleteFilipinoFood); // delete a food 
+router.delete("/:id", pinoyfood.deleteFilipinoFood); // delete a food
+
 
 module.exports = router;
