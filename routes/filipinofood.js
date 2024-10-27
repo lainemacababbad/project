@@ -1,7 +1,11 @@
 const express = require("express");
 const router = express.Router();
+const { validateFilipinoFood } = require('../validators/validator');
+const { validationResult } = require('express-validator');
 
 const pinoyfood = require("../controllers/pinoyFlavor");
+
+
 
 /**
  * @swagger
@@ -75,7 +79,7 @@ router.get("/:id", pinoyfood.getSingleFilipinoFood); // get a single filipino fo
  *       500:
  *         description: Error occurred while adding food.
  */
-router.post("/", pinoyfood.newFilipinoFood); // add a filipino food
+router.post("/", validateFilipinoFood, pinoyfood.newFilipinoFood); // add a filipino food
 
 /**
  * @swagger
@@ -119,7 +123,7 @@ router.post("/", pinoyfood.newFilipinoFood); // add a filipino food
  *       500:
  *         description: An error occurred while updating the food.
  */
-router.put("/:id", pinoyfood.updateFilipinoFood); // update a food
+router.put("/:id", validateFilipinoFood, pinoyfood.updateFilipinoFood); // update a food
 
 /**
  * @swagger
