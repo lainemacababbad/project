@@ -1,27 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Filipino Food & Shopping List</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script src="script.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+    <title>Filipino Food and Shopping List</title>
 </head>
 <body>
-  <header>
-    <h1>Filipino Food and Shopping List</h1>
-  </header>
+    <header>
+        <h1>Filipino Food and Shopping List</h1>
+    </header>
 
-  <main>
-    <section id="filipino-food">
-      <h2>Filipino Food</h2>
-      <ul id="food-list"></ul>
-    </section>
+    <main id="content">
+        <nav>
+            <a href="#" onclick="fetchFilipinoFood()">Food List</a>
+            <a href="#" onclick="fetchShoppingList()">Shopping List</a>
+            <a href="#" onclick="showAddFoodForm()">Add Food</a>
+            <a href="#" onclick="showAddShoppingItemForm()">Add Shopping Item</a>
+        </nav>
 
-    <section id="shopping-list">
-      <h2>Shopping List</h2>
-      <ul id="shopping-list-items"></ul>
-    </section>
-  </main>
+        <!-- Food List Section -->
+        <section id="foodListSection" class="content-section" style="display:none;">
+            <h2>Food List</h2>
+            <ul id="foodList"></ul>
+        </section>
+
+        <!-- Shopping List Section -->
+        <section id="shoppingListSection" class="content-section" style="display:none;">
+            <h2>Shopping List</h2>
+            <ul id="shoppingList"></ul>
+        </section>
+
+        <!-- Add Food Section -->
+        <section id="addFoodSection" class="content-section" style="display:none;">
+            <h2>Add Food</h2>
+            <form id="addFoodForm" onsubmit="addFood(event)">
+                <input type="text" id="foodName" placeholder="Name" required>
+                <input type="text" id="foodDescription" placeholder="Description" required>
+                <input type="text" id="foodIngredients" placeholder="Ingredients" required>
+                <input type="text" id="foodInstructions" placeholder="Instructions" required>
+                <input type="text" id="foodRegion" placeholder="Region" required>
+                <button type="submit">Add Food</button>
+            </form>
+        </section>
+
+        <!-- Add Shopping Item Section -->
+        <section id="addShoppingItemSection" class="content-section" style="display:none;">
+            <h2>Add Shopping Item</h2>
+            <form id="addShoppingForm" onsubmit="addShoppingItem(event)">
+                <input type="text" id="itemName" placeholder="Name" required>
+                <input type="number" id="itemQuantity" placeholder="Quantity" required>
+                <input type="text" id="itemUnit" placeholder="Unit" required>
+                <input type="text" id="itemCategory" placeholder="Category" required>
+                <button type="submit">Add Item</button>
+            </form>
+        </section>
+    </main>
 </body>
 </html>

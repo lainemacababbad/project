@@ -1,15 +1,22 @@
-const swaggerJSDoc = require('swagger-jsdoc');
+// swagger.js
+const swaggerJsDoc = require('swagger-jsdoc');
 
-const options = {
-  definition: {
+const swaggerOptions = {
+  swaggerDefinition: {
     openapi: '3.0.0',
     info: {
-      title: 'Pinoy Flavor API',
+      title: 'Filipino Food API',
       version: '1.0.0',
-      description: 'API documentation for Pinoy Flavor',
+      description: 'API for managing Filipino food and shopping list',
     },
+    servers: [
+      {
+        url: 'http://localhost:3000/', // Update this URL accordingly
+      },
+    ],
   },
-  apis: ['./routes/*.js'], // Path to the API routes
+  apis: ['./routes/*.js'], // Path to the API docs
 };
-const swaggerSpec = swaggerJSDoc(options);
-module.exports = swaggerSpec;
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+module.exports = swaggerDocs;

@@ -68,7 +68,7 @@ router.get("/:id", pinoyfood.getSingleFilipinoFood); // get a single filipino fo
  *                 type: string
  *             required:
  *               - name
- *               - description  # Fixed typo here
+ *               - description
  *               - ingredients
  *               - instructions
  *               - region

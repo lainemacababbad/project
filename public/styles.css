@@ -1,29 +1,139 @@
 body {
-    background-color: #f0f0f0;
-    color: #333;
-  }
-  
-  header {
-    background-color: #c8102e;
-    color: white;
-    text-align: center;
-    padding: 10px 0;
-  }
-  
-  h2 {
-    color: #003da5;
-  }
-  
-  ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  li {
-    background: white;
-    margin: 10px 0;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
+
+header {
+  background: #333;
+  color: #fff;
+  padding: 10px 0;
+  text-align: center;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+nav a {
+  display: inline-block;
+  padding: 15px 20px;
+  background-color: #0038A8;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+nav a:hover {
+  background-color: #CE1126;
+  color: #FFD700;
+  transform: scale(1.05);
+}
+
+nav a.active {
+  background-color: #FFD700;
+  color: #0038A8;
+}
+
+main {
+  padding: 20px;
+}
+
+/* Content for food and shopping list */
+.content-section {
+  display: none; 
+  text-align: center;
+  margin: 20px;
+}
+
+.content-section h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #0038A8;
+  font-size: 2em;
+}
+
+#foodList, #shoppingList {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#foodList li, #shoppingList li {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin: 10px 0;
+  width: 50%;
+  margin: 10px auto;
+}
+
+.ingredients, .instructions {
+  list-style-type: none;
+}
+
+.content-section.active {
+  display: block; 
+}
+
+/* Form */
+form {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  margin: 0 auto;
+  transition: transform 0.3s ease;
+}
+
+/* Input styling */
+input {
+  display: block;
+  width: calc(100% - 20px);
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: #0038A8; 
+}
+
+/* Button */
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #0038A8;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+  background-color: #CE1126; 
+  transform: translateY(-3px); 
+}
+
+button:active {
+  background-color: #FFD700; 
+  transform: translateY(1px); 
+}
