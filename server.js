@@ -36,7 +36,7 @@ mongodb.initDb((err, mongodbInstance) => {
     passport.use(new GoogleStrategy({
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "/auth/google/callback"
+      callbackURL: "https://cse341-project-6k9u.onrender.com/auth/google/callback"
     },
     (accessToken, refreshToken, profile, done) => {
       return done(null, profile);
