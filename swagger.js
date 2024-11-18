@@ -1,9 +1,8 @@
-// swagger.js
 const swaggerJsDoc = require('swagger-jsdoc');
 
 const swaggerOptions = {
-  swaggerDefinition: {
-    openapi: '3.0.0',
+  definition: { // Change this from swaggerDefinition to definition
+    openapi: '3.1.0', // Ensure this matches a supported version
     info: {
       title: 'Filipino Food API',
       version: '1.0.0',
@@ -11,12 +10,25 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: 'http://localhost:3000/', // Update this URL accordingly
+        url: 'http://localhost:3000/',
+      },
+    ],
+    components: {
+      securitySchemes: {
+        OpenId: {
+          type: 'openIdConnect',
+          openIdConnectUrl: 'https://dev-u2wo228hitj2qwjk.us.auth0.com/.well-known/openid-configuration',
+        },
+      },
+    },
+    security: [
+      {
+        OpenId: [],
       },
     ],
   },
-  apis: ['./routes/*.js'], // Path to the API docs
+  apis: ['./routes/*.js'],
 };
 
-const swaggerDocs = swaggerJsDoc(swaggerOptions);
-module.exports = swaggerDocs;
+const swaggerSpec = swaggerJsDoc(swaggerOptions);
+module.exports = swaggerSpec;

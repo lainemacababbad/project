@@ -8,10 +8,38 @@ const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const path = require("path");
+const { auth } = require('express-openid-connect');
+const dotenv = require("dotenv");
+const cors = require("cors");
+dotenv.config();
+
 require('dotenv').config();
 
 const port = process.env.PORT || 3000;
 const app = express();
+
+// auth router attaches /login, /logout, and /callback routes to the baseURL
+app
+  .use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
+  .use(cors())
+  .use(express.json())
+  .use(express.urlencoded({ extended: true }))
+  .use("/", require("./routes"));
+
+// req.isAuthenticated is provided from the auth router
+app.get('/', (req, res) => {
+  res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+});
+
+const { requiresAuth } = require('express-openid-connect');
+
+app.get('/profile', requiresAuth(), (req, res) => {
+  res.send(JSON.stringify(req.oidc.user));
+});
+
+
+
+
 
 // Initialize MongoDB client for session store
 const mongoUrl = process.env.MONGODB_URI;
@@ -56,7 +84,7 @@ mongodb.initDb((err, mongodbInstance) => {
     app.get("/auth/google/callback",
       passport.authenticate("google", { failureRedirect: "/" }),
       (req, res) => {
-        res.redirect("/"); // Redirect to home or dashboard
+        res.redirect("/"); // Redirect to home or dashboard after logging in
       }
     );
 
