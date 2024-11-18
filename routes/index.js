@@ -35,7 +35,7 @@ router.use(auth(config));
  *       200:
  *         description: Successful response authentication
  */
-app.get('/', (req, res) => {
+router.get('/', (req, res) => {
     res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
   });
 
@@ -52,7 +52,7 @@ app.get('/', (req, res) => {
  *         description: Successful response with profile data
  */
 
-routes.get('/profile', requiresAuth(), (req, res) => {
+router.get('/profile', requiresAuth(), (req, res) => {
     res.send(JSON.stringify(req.oidc.user, null, 2));
   });
 
