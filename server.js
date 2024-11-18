@@ -22,14 +22,6 @@ app
   .use("/", require("./routes"))
   .use(express.static(path.join(__dirname, "public")));
 
-app.get('/', (req, res) => {
-  res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
-});
-
-app.get('/profile', requiresAuth(), (req, res) => {
-  res.send(JSON.stringify(req.oidc.user));
-});
-
 const mongoUrl = process.env.MONGODB_URI;
 
 mongodb.initDb((err, mongodbInstance) => {

@@ -10,7 +10,7 @@ const config = {
     auth0Logout: true,
     secret: process.env.SECRET,
     baseURL: process.env.BASEURL,
-    
+
     clientID: process.env.CLIENT_ID,
     issuerBaseURL: process.env.ISSUER_BASE_URL
   };
@@ -27,6 +27,20 @@ router.use(auth(config));
 
 /**
  * @swagger
+ * /:
+ *   get:
+ *     summary: Get an authentications state
+ *     description: Retrieve authentication
+ *     responses:
+ *       200:
+ *         description: Successful response authentication
+ */
+app.get('/', (req, res) => {
+    res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+  });
+
+/**
+ * @swagger
  * /profile:
  *   get:
  *     summary: Get a user profile
@@ -38,7 +52,7 @@ router.use(auth(config));
  *         description: Successful response with profile data
  */
 
-router.get('/profile', requiresAuth(), (req, res) => {
+routes.get('/profile', requiresAuth(), (req, res) => {
     res.send(JSON.stringify(req.oidc.user, null, 2));
   });
 
